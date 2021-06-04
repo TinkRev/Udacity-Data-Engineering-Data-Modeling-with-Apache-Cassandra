@@ -11,28 +11,58 @@ from sql_queries import *
 from cassandra.cluster import Cluster
 
 def show_session_history_select_result(rows):
+    """
+    Description: This function can be used to show session_history table select query result.
+
+    Arguments:
+        rows: the selected rows. 
+
+    Returns:
+        None
+    """
     print("## Query 1:  Give me the artist, song title and song's length in the music app history that was heard during  sessionId = 338, and itemInSession = 4")
     for row in rows:
         print (row.artist, row.song, row.length)
 
 def show_user_session_history_select_result(rows):
+    """
+    Description: This function can be used to show user_session_history table select query result.
+
+    Arguments:
+        rows: the selected rows. 
+
+    Returns:
+        None
+    """
     print("## Query 2: Give me only the following: name of artist, song (sorted by itemInSession) and user (first and last name) for userid = 10, sessionid = 182")
     for row in rows:
         print (row.artist, row.song, row.firstname, row.lastname)
 
 def show_song_history_select_result(rows):
+    """
+    Description: This function can be used to show song_history table select query result.
+
+    Arguments:
+        rows: the selected rows. 
+
+    Returns:
+        None
+    """
     print("## Query 3: Give me every user name (first and last) in my music app history who listened to the song 'All Hands Against His Own'")
     for row in rows:
         print (row.firstname, row.lastname)
         
 def process_history(session, createTableQuery, insertQuery, selectQuery, func):
     """
-    Description: This function can be used to read the file in the filepath (data/song_data)
-    to get the song and artist info and used to populate the songss and artists dim tables.
+    Description: This function can be used to create table, insert data into table, select data from table
+    and used to execute show func.
 
     Arguments:
-        cur: the cursor object. 
-        filepath: song data file path. 
+        session: the session object. 
+        createTableQuery: create table query. 
+        insertQuery: insert into table query.
+        selectQuery: select from table query.
+        func: execute func to show select result.
 
     Returns:
         None
@@ -68,11 +98,10 @@ def process_history(session, createTableQuery, insertQuery, selectQuery, func):
 def process_data(filepath):
     """
     Description: This function can be used to read the file in the specified filepath
-    to get the json file and used to execute specified function.
+    to get the csv file and gather data in a new csv file.
 
     Arguments:
-        cur: the cursor object. 
-        filepath: song data file path. 
+        filepath: event data file path. 
 
     Returns:
         None
@@ -135,8 +164,7 @@ def main():
     to connect database and process csv data from data directory.
 
     Arguments:
-        cur: the cursor object. 
-        filepath: song data file path. 
+        None
 
     Returns:
         None

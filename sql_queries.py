@@ -4,59 +4,38 @@ session_history_table_drop = "drop table if exists session_history_table"
 user_session_history_table_drop = "drop table if exists user_session_history"
 song_history_table_drop = "drop table if exists song_history"
 
-# CREATE TABLES
+# CREATE TABLES 
+# the sequence of columns match that of the sequence of PRIMARY KEYs.
 
 session_history_table_create = (""" 
 CREATE TABLE IF NOT EXISTS session_history
     (
-        artist text, 
-        firstName text, 
-        gender text, 
-        itemInSession decimal, 
-        lastName text, 
-        length decimal, 
-        level text, 
-        location text, 
-        sessionId decimal, 
-        song text, 
-        userId decimal, 
+        sessionId decimal, itemInSession decimal, 
+        artist text, firstName text, gender text, lastName text,length decimal, 
+        level text, location text, song text, userId decimal, 
         PRIMARY KEY (sessionId, itemInSession)
     )
 """)
 
+## Set userId and sessionId as a COMPOSITE PARTITIOIN KEY.
+## That way, itemInSession will become the only CLUSTERING COLUMN and the data will be ordered as required.
 user_session_history_table_create = (""" 
 CREATE TABLE IF NOT EXISTS user_session_history
     (
-        artist text, 
-        firstName text, 
-        gender text, 
-        itemInSession decimal, 
-        lastName text, 
-        length decimal, 
-        level text, 
-        location text, 
-        sessionId decimal, 
-        song text, 
-        userId decimal, 
-        PRIMARY KEY (userId, sessionId, itemInSession)
+        userId decimal, sessionId decimal, itemInSession decimal, 
+        artist text, firstName text, gender text, lastName text, length decimal, level text, location text, song text, 
+        PRIMARY KEY ((userId, sessionId), itemInSession)
     )
 """)
 
+## should consider the scenario where two or more person with the same first and last name are listening to the same song.
 song_history_table_create = ("""
 CREATE TABLE IF NOT EXISTS song_history
     (
-        artist text, 
-        firstName text, 
-        gender text, 
-        itemInSession decimal, 
-        lastName text, 
-        length decimal, 
-        level text, 
-        location text, 
-        sessionId decimal, 
-        song text, 
-        userId decimal, 
-        PRIMARY KEY (song, firstName, lastName)
+        song text, userId decimal, 
+        artist text, firstName text, gender text, itemInSession decimal, lastName text, 
+        length decimal, level text, location text, sessionId decimal,  
+        PRIMARY KEY (song, userId)
     )
 """)
 
